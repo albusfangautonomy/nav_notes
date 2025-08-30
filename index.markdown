@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: Navigation Notes
 nav_order: 1
 ---
@@ -12,23 +12,12 @@ Welcome to my collection of navigation-related notes. These pages compile theory
 
 ### Localization
 
-- [Overview](./notes/overview.html) \
-  Fundamental concepts in navigation: frames of reference, coordinate transforms, and reference systems.
-
-- [Dead Reckoning](./notes/dead_reckoning.html) \
-  Using onboard odometry and motion models to estimate position over time.
-
-- [Kalman Filters](./notes/kalman_filter.html) \
-  Linear Kalman Filter, Extended Kalman Filter (EKF), and Unscented Kalman Filter (UKF) for state estimation.
-
 - [Particle Filters](./notes/autonomous_nav.html) \
   Monte Carlo Localization, resampling strategies, and handling non-Gaussian noise.
 
 - [Sensor Fusion](./notes/sensor_fusion.html) \
   Integrating data from GNSS, IMU, Lidar, and cameras.
 
-- [GNSS & RTK](./notes/gnss.html) \
-  GPS fundamentals, error sources, and real-time kinematic corrections.
 
 ### Mapping & SLAM
 
