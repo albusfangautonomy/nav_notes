@@ -1,7 +1,6 @@
 ---
-layout: page
-title: Navigation Notes
-nav_order: 1
+layout: default
+title: Home
 ---
 
 # 🧭 Navigation Notes

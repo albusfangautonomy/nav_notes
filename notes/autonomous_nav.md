@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Autonomous Navigation
-nav_order: 1
+nav_exclude: true
 ---
 
 # Autonomous Vehicle Navigation
