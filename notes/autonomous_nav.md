@@ -44,4 +44,4 @@ Simultaneously building a map and localizing.
 ### Main issue - uncertainty
 Lidar is accurate by odometry would have large uncertainty which would make the map deviates more and more at each time step.
 
-![]()
+![SLAM Issue](../figures/slam_issues.png)

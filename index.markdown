@@ -1,8 +1,7 @@
 ---
 layout: default
 title: Navigation Notes
-nav_order: 2
-has_children: true
+nav_order: 1
 ---
 
 # 🧭 Navigation Notes
@@ -22,7 +21,7 @@ Welcome to my collection of navigation-related notes. These pages compile theory
 - [Kalman Filters](./notes/kalman_filter.html) \
   Linear Kalman Filter, Extended Kalman Filter (EKF), and Unscented Kalman Filter (UKF) for state estimation.
 
-- [Particle Filters](./notes/particle_filter.html) \
+- [Particle Filters](./notes/autonomous_nav.html) \
   Monte Carlo Localization, resampling strategies, and handling non-Gaussian noise.
 
 - [Sensor Fusion](./notes/sensor_fusion.html) \
