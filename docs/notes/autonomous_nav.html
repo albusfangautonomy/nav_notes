@@ -96,6 +96,76 @@
 
 <p><img src="../figures/slam_issues.png" alt="SLAM Issue" /></p>
 
+<h3 id="pose-graphs">Pose Graphs</h3>
+<p>A pose graph represents the positions and orientations (“poses”) of a vehicle or sensor over time as a graph structure.</p>
+<ul>
+  <li>Nodes (vertices): Each node represents a pose — usually a 2D (x, y, θ) or 3D (x, y, z, roll, pitch, yaw) position and orientation estimate</li>
+  <li>Edges: Each edge encodes a spatial constraint between two poses for both position and orientation, which comes from measurements (e.g., odometry, GNSS, LiDAR scan matching, visual odometry). These constraints often have associated uncertainty (covariance). Edges usually come from
+    <ul>
+      <li>Odometry / motion model (sequential poses)</li>
+      <li><strong>Loop closure detections</strong> (non-sequential poses when the robot revisits a place)</li>
+      <li>Sensor measurements (e.g., odometry, GNSS, LiDAR scan matching, visual odometry)</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="solving-the-issue---pose-graph-optimization-and-loop-closure">Solving the issue - Pose Graph Optimization and Loop closure</h3>
+<ol>
+  <li>It is better to miss a loop closure than to add a false one. It’s crucial that you’re confident in the loop closure.</li>
+  <li>Loop Closure requires an absolute measurement of the environment (lidar, camera, GNSS, etc). Relative measurements such as IMU or encoders cannot be used since there is no way to relate the readings back to a previous pose.
+    <ul>
+      <li>You may think you’re close to a prior node with deadreckoning IMU and encoder, but cannot know for sure.</li>
+    </ul>
+  </li>
+  <li>Optimization Problem
+    <ul>
+      <li>Objective (what we are optimizing): finding the set of robot poses \(\mathcal{X} = {x_1, x_2, ..., x_N}\) that best explain all the measurements in the graph.
+        <ul>
+          <li>Each pose \(x_i\) is usually a 2d vector \((x, y, \theta)\), or 3d \((x, y, z, \phi, \theta, \psi)\)</li>
+        </ul>
+      </li>
+      <li>
+        <p>For every edge between poses \(i\) and \(j\), we have a measured relative pose \(z_{ij}\) and its uncertainty (covariance). $$z_{ij} = (\delta x, \delta y, \delta \theta)$</p>
+      </li>
+      <li>Cost Function:
+        <ul>
+          <li>for each edge:
+            <ol>
+              <li>Predicted relative pose from current guess: $\hat{z}_{ij} - f(x_i, x_j)$. This is the geometric difference between current estimates of \(x_i\) and \(x_j\).</li>
+              <li>Error (residual): \(e_{ij} = z_{ij} - \hat{z}_{ij}\)</li>
+              <li>Weighting by confidence:
+                <ul>
+                  <li>
+\[\||e_{ij}\||^{2}_{\Omega_{ij}} = e_{ij}^T * \Omega_{ij} * e_{ij}\]
+                  </li>
+                  <li>where \(\Omega_{ij} e_{ij}\) is the information matrix (inverse of covariance).</li>
+                  <li>If confidence in measurement is high, \(\Omega_{ij} e_{ij}\) will be large.</li>
+                  <li>If measurement is uncertain, \(\Omega_{ij} e_{ij}\) will be small.</li>
+                </ul>
+              </li>
+            </ol>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>The full optimization problem</p>
+
+        <p>We sum the weighted squared errors over <strong>all edges</strong> in the graph:</p>
+
+\[\min_{\mathbf{X}} \; \sum_{(i,j) \in \mathcal{E}} e_{ij}^T \, \Omega_{ij} \, e_{ij}\]
+
+        <ul>
+          <li><strong>Variables</strong>: the poses \(x_1, \dots, x_N\)</li>
+          <li><strong>Measurements</strong>: all \(z_{ij}\)</li>
+          <li><strong>Goal</strong>: adjust all poses so these relative constraints are satisfied <strong>as much as possible</strong>.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="occupancy-grid-mapping">Occupancy Grid (Mapping)</h3>
+
       </div>
     </main><footer class="site-footer h-card">
   <data class="u-url" href="/nav_notes/"></data>
